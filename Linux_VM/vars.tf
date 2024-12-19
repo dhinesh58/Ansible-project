@@ -19,3 +19,12 @@ variable "admin_username" {
 variable "admin_password" {
     description = "value for admin_password"
 }
+variable "publisher" {
+  description = " value for publisher "
+}
+variable "offer" {
+  description = "value for the offer"
+}
+variable "sku" {
+  description = "value for sku"
+}
