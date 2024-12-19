@@ -3,6 +3,4 @@ Backendfile-backup
 Changes-Portal
 For_Each
 Windows VM
-vars.tf
-vars.tfvars
 *.exe
