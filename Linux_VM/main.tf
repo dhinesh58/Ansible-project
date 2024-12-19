@@ -69,3 +69,7 @@ resource "azurerm_linux_virtual_machine" "myvm" {
     version   = "Latest"
   }
 }
+output "VMIPS" {
+  description = "VM Public IP address"
+  value = azurerm_linux_virtual_machine.myvm.public_ip_addresses
+}
