@@ -27,7 +27,7 @@ resource "azurerm_public_ip" "mypuip" {
     name = "publicip-${count.index}"
     resource_group_name = azurerm_resource_group.myrg.name
     location = var.location
-    allocation_method = "Dynamic" 
+    allocation_method = "Static" 
 }
 #Create multiple Network interfaces using count
 resource "azurerm_network_interface" "mynic" {
@@ -100,8 +100,4 @@ resource "azurerm_linux_virtual_machine" "myvm" {
     sku       = var.sku
     version   = "Latest"
   }
-}
-output "VMIPS" {
-  description = "VM Public IP address"
-  value = azurerm_linux_virtual_machine.myvm.public_ip_addresses
 }
