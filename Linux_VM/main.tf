@@ -27,7 +27,7 @@ resource "azurerm_public_ip" "mypuip" {
     name = "publicip-${count.index}"
     resource_group_name = azurerm_resource_group.myrg.name
     location = var.location
-    allocation_method = "Dynamic" 
+    allocation_method = "Static" 
 }
 #Create multiple Network interfaces using count
 resource "azurerm_network_interface" "mynic" {
@@ -43,6 +43,38 @@ resource "azurerm_network_interface" "mynic" {
       public_ip_address_id = azurerm_public_ip.mypuip[count.index].id
     }
 }
+
+# Create Network Secuity group 
+
+resource "azurerm_network_security_group" "example" {
+  name                = "acceptanceTestSecurityGroup1"
+  location            = azurerm_resource_group.myrg.location
+  resource_group_name = azurerm_resource_group.myrg.name
+
+  security_rule {
+    name                       = "test123"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+
+# Create a subnet_network_security_group_association
+
+resource "azurerm_subnet_network_security_group_association" "example" {
+  subnet_id                 = azurerm_subnet.mysubnet.id
+  network_security_group_id = azurerm_network_security_group.example.id
+}
+
 # Create Multiple Linux Virtual machines using count
 resource "azurerm_linux_virtual_machine" "myvm" {
     count = 3
@@ -68,8 +100,4 @@ resource "azurerm_linux_virtual_machine" "myvm" {
     sku       = var.sku
     version   = "Latest"
   }
-}
-output "VMIPS" {
-  description = "VM Public IP address"
-  value = azurerm_linux_virtual_machine.myvm.public_ip_addresses
 }

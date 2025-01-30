@@ -1,0 +1,11 @@
+---
+- name: Playbook to install generic tools
+  hosts: all
+  gather_facts: yes
+  become: yes
+  become_user: root
+  tasks:
+    - name: perform apt update
+      shell: apt-get update
+    - name: install tools
+      shell: apt-get install -y ansible
